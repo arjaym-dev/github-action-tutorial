@@ -5,7 +5,7 @@ export default function Home() {
     <React.Fragment>
       <header>This is header</header>
       <main>
-        <h1>Github action demo a</h1>
+        <h1>Github action demo a edited</h1>
       </main>
       <footer>This is footer</footer>
     </React.Fragment>
