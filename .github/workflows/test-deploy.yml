@@ -1,4 +1,4 @@
-name: Test and Deploy ${{github.repository}}
+name: Test and Deploy
 run-name: ${{github.actor}} running test and deploy
 on:
   pull_request:
