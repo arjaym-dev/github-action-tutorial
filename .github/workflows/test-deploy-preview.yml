@@ -10,8 +10,8 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 jobs:
   test-and-deploy-preview:
-    if: false # TODO: Temporary disabled until we need this.
-    # if: ${{contains('dev', github.event.pull_request.base.ref)}}
+    # if: false # TODO: Temporary disabled until we need this.
+    if: ${{contains('dev', github.event.pull_request.base.ref)}}
     runs-on: ubuntu-latest
     environment:
       name: Preview
