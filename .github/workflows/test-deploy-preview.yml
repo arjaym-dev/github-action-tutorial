@@ -1,5 +1,9 @@
-name: Test and Deploy
+name: Test and Deploy Preview
 run-name: ${{github.actor}} running test and deploy
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
 on:
   pull_request:
     branches:
@@ -26,8 +30,20 @@ jobs:
           node-version: 20.11.0
           cache: "pnpm"
 
+      - name: Install vercel cli
+        run: pnpm i --g vercel@latest
+
       - name: Install dependencies
         run: pnpm install
 
+      - name: Pull vercel environment information
+        run: vercel pull --yes --environment=preview --token=${{secrets.VERCEL_TOKEN}}
+
       - name: Run linting checks
         run: pnpm lint
+
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
