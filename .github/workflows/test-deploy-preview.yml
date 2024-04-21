@@ -12,15 +12,10 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 jobs:
   test-and-deploy-preview:
-    if: ${{contains('dev', github.event.pull_request.base.ref)}}
+    if: false # TODO: Temporary disabled until we need this.
+    # if: ${{contains('dev', github.event.pull_request.base.ref)}}
     runs-on: ubuntu-latest
     steps:
-      - name: Echo Values
-        run: |
-          echo ${{secrets.VERCEL_TOKEN}}
-          echo ${{secrets.VERCEL_ORG_ID}}
-          echo ${{secrets.VERCEL_PROJECT_ID}}
-
       - name: Checkout ${{github.ref}} repository
         uses: actions/checkout@v4
         with:
