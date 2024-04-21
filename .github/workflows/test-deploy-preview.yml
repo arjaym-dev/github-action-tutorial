@@ -10,14 +10,12 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 jobs:
   test-and-deploy-preview:
-    # if: false # TODO: Temporary disabled until we need this.
+    # Don't proceed if it is not dev branch
     if: ${{contains('dev', github.event.pull_request.base.ref)}}
     runs-on: ubuntu-latest
     environment:
       name: Preview
     steps:
-      - name: Echo
-        run: echo ${{github.event.pull_request.base.ref}}
       - name: Checkout ${{github.ref}} repository
         uses: actions/checkout@v4
         with:
