@@ -1,0 +1,51 @@
+name: Test and Deploy Preview
+run-name: ${{github.actor}} running test and deploy
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{secrets.VERCEL_PROJECT_ID}}
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+    types: [opened, reopened, synchronize, ready_for_review]
+jobs:
+  test-and-deploy-preview:
+    if: false # TODO: Temporary disabled until we need this.
+    # if: ${{contains('dev', github.event.pull_request.base.ref)}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ${{github.ref}} repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{github.ref}}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8.14.1
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.0
+          cache: "pnpm"
+
+      - name: Install vercel cli
+        run: pnpm i --g vercel@latest
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Pull vercel environment information
+        run: vercel pull --yes --environment=preview --token=${{secrets.VERCEL_TOKEN}}
+
+      - name: Run linting checks
+        run: pnpm lint
+
+      - name: Build Project Artifacts
+        run: pnpm vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: pnpm vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
